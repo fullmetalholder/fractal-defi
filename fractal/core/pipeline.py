@@ -47,7 +47,7 @@ class ExperimentConfig:
         strategy_type (Type[BaseStrategy]): Strategy class to run.
         params_grid (ParameterGrid): Grid of parameters to run the strategy.
         backtest_observations (Optional[List[Observation]]): Observations for backtesting.
-        backtest_trajectories (Optional[List[List[Observation]]): Trajectories for backtesting iterations.
+        backtest_trajectories (Optional[List[List[Observation]]]: Trajectories for backtesting iterations.
         window_size (Optional[int]): Window size for scenarios.
     """
     strategy_type: Type[BaseStrategy]
@@ -151,6 +151,8 @@ class DefaultPipeline(Pipeline):
         # start run
         with mlflow.start_run(run_name=run_name):
             mlflow.log_params(params)
+            if run_name:
+                mlflow.set_tag("mlflow.runName", run_name)
             # check all levels of experiment
             if self._config.backtest_observations:
                 strategy_data: StrategyResult = launcher.run_strategy(
